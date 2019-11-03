@@ -1,0 +1,30 @@
+!java.util.Stack
+-  01ef2a2e-6f37-4fe0-9fea-68e10ca6bb7b: &1 !models.User
+      id: 01ef2a2e-6f37-4fe0-9fea-68e10ca6bb7b
+      email: marge@simpson.com
+      firstName: homer
+      lastName: marge
+      password: secret
+   921cd9a2-1ee3-49bc-95f7-bb7ccdb22fc3: &2 !models.User
+      id: 921cd9a2-1ee3-49bc-95f7-bb7ccdb22fc3
+      email: lisa@simpson.com
+      firstName: lisa
+      lastName: simpson
+      password: secret
+   fd45c0ba-6843-40a5-9a34-8b9622419f42: &3 !models.User
+      id: fd45c0ba-6843-40a5-9a34-8b9622419f42
+      email: bart@simpson.com
+      firstName: bart
+      lastName: simpson
+      password: secret
+   c5bc7858-880e-4d8d-95ff-6a69349b9b9f: &4 !models.User
+      id: c5bc7858-880e-4d8d-95ff-6a69349b9b9f
+      email: maggie@simpson.com
+      firstName: maggie
+      lastName: simpson
+      password: secret
+-  lisa@simpson.com: *2
+   marge@simpson.com: *1
+   bart@simpson.com: *3
+   maggie@simpson.com: *4
+- {}

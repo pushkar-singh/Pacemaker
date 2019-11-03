@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>pacemaker</artifactId>
+        <groupId>pacemaker</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <build.directory.projecta>../pacemaker-console/target</build.directory.projecta>
+        <build.directory.projectb>../pacemaker-models/target</build.directory.projectb>
+        <build.directory.projectc>../pacemaker-serializer/target</build.directory.projectc>
+
+        <classes.directory.projecta>../pacemaker-console/target/classes</classes.directory.projecta>
+        <classes.directory.projectb>../pacemaker-models/target/classes</classes.directory.projectb>
+        <classes.directory.projectc>../pacemaker-serializer/target/classes</classes.directory.projectc>
+
+        <sources.directory.projecta>../pacemaker-console/src/main/java</sources.directory.projecta>
+        <sources.directory.projectb>../pacemaker-models/src/main/java</sources.directory.projectb>
+        <sources.directory.projectc>../pacemaker-serializer/src/main/java</sources.directory.projectc>
+    </properties>
+
+    <artifactId>pacemaker-coverage</artifactId>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <!-- Copy the ant tasks jar. Needed for ts.jacoco.report-ant . -->
+                    <execution>
+                        <id>jacoco-dependency-ant</id>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <phase>process-test-resources</phase>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.jacoco</groupId>
+                                    <artifactId>org.jacoco.ant</artifactId>
+                                    <version>${jacoco.version}</version>
+                                </artifactItem>
+                            </artifactItems>
+                            <stripVersion>true</stripVersion>
+                            <outputDirectory>${basedir}/target/jacoco-jars</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo message="Generating Test Coverage Reports"/>
+                                <taskdef name="report" classname="org.jacoco.ant.ReportTask">
+                                    <classpath path="${basedir}/target/jacoco-jars/org.jacoco.ant.jar"/>
+                                </taskdef>
+                                <mkdir dir="${basedir}/target/coverage-report"/>
+                                <report>
+                                    <executiondata>
+                                        <fileset dir="${build.directory.projecta}">
+                                            <include name="jacoco.exec"/>
+                                        </fileset>
+                                        <fileset dir="${build.directory.projectb}">
+                                            <include name="jacoco.exec"/>
+                                        </fileset>
+                                        <fileset dir="${build.directory.projectc}">
+                                            <include name="jacoco.exec"/>
+                                        </fileset>
+                                    </executiondata>
+                                    <structure name="Pacemaker Coverage Report">
+                                        <group name="Pacemaker">
+                                            <classfiles>
+                                                <fileset dir="${classes.directory.projecta}"/>
+                                                <fileset dir="${classes.directory.projectb}"/>
+                                                <fileset dir="${classes.directory.projectc}"/>
+                                            </classfiles>
+                                            <sourcefiles encoding="UTF-8">
+                                                <fileset dir="${sources.directory.projecta}"/>
+                                                <fileset dir="${sources.directory.projectb}"/>
+                                                <fileset dir="${sources.directory.projectc}"/>
+                                            </sourcefiles>
+                                        </group>
+                                    </structure>
+                                    <html destdir="${basedir}/target/coverage-report"/>
+                                </report>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>org.jacoco.ant</artifactId>
+                        <version>${jacoco.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+</project>
